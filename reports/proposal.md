@@ -1,4 +1,4 @@
-# C-Horses: Accelerated K-Means
+# (Sreekanth S., Kawin N., Siddharth G.) C-Horses: Accelerated K-Means
 
 ## Goals
 

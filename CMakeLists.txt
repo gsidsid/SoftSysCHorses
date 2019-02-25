@@ -1,0 +1,5 @@
+project (SoftSysCHorses)
+cmake_minimum_required (VERSION 2.6)
+add_subdirectory (src)
+add_executable (kmeans kmeans.c)
+target_link_libraries (kmeans ${PROJECT_NAME})

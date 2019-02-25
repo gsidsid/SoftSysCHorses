@@ -1,4 +1,4 @@
-# C-Horses: Accelerated K-Means
+# (Sreekanth Sajjala., Kawin Nikomborirak., Siddharth Garimella.) C-Horses: Accelerated K-Means
 
 ## Goals
 

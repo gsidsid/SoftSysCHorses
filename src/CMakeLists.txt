@@ -1,7 +1,12 @@
 find_package (Threads)
 
 if (NOT DEFINED NTHREADS)
-  set (NTHREADS 8)
+  if (WIN32)
+    set(NTHREADS 8)
+  endif()
+  if(UNIX)
+    execute_process(COMMAND nproc OUTPUT_VARIABLE NTHREADS)
+  endif()
 endif(NOT DEFINED NTHREADS)
 
 configure_file (

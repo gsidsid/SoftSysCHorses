@@ -5,8 +5,6 @@
 
 #include "parallel_distance.h"
 
-#define NTHREADS 8
-
 double distanceSquared(const struct Point a, const struct Point b) {
   return pow(a.x_ - b.x_, 2) + pow(a.y_ - b.y_, 2);
 }

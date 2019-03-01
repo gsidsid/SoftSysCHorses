@@ -1,5 +1,8 @@
-#include <parallel_distance.h>
 #include <stdio.h>
+
+#include <parallel_distance.h>
+
+struct Point **kmeans(struct Point *points, int num_pts, int num_clusters) {}
 
 int main() {
   struct Point a = {.x_ = 0, .y_ = 0};
@@ -19,6 +22,5 @@ int main() {
   distanceSquareds(o, z, 9, w);
   for (int i = 0; i < 9; ++i)
     printf("%d: %f\n", i, w[i]);
-  /* printf("%lf\n", distanceSquared(x, y)); */
   printf("nthreads: %d\n", NTHREADS);
 }

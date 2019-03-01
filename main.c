@@ -2,8 +2,6 @@
 
 #include <parallel_distance.h>
 
-struct Point **kmeans(struct Point *points, int num_pts, int num_clusters) {}
-
 int main() {
   struct Point a = {.x_ = 0, .y_ = 0};
   struct Point b = {.x_ = 0, .y_ = 1};

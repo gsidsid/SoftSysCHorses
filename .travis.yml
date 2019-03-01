@@ -1,9 +1,13 @@
-dist: bionic
+dist: xenial
+sudo: require
 language: cpp
 
+addons:
+  apt:
+    packages:
+      - libgtest-dev
+
 before_script:
-  - apt-get update
-  - apt-get install -y libgtest-dev
   - mkdir build
   - cd build
   - cmake ..

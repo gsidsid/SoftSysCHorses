@@ -7,4 +7,5 @@ We are sea horses.
 2. `cd build`
 3. `cmake ..`
 4. `make`
-5. To test, `ctest`
+5. To run, `./main`
+6. To test, `ctest`

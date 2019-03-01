@@ -1,4 +1,6 @@
 # SoftSysCHorses
+[![Build Status](https://travis-ci.org/gsidsid/SoftSysCHorses.svg?branch=master)](https://travis-ci.org/gsidsid/SoftSysCHorses)
+
 We are sea horses.
 
 # Instructions

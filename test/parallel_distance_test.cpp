@@ -43,8 +43,15 @@ TEST(KMeansTest, POSITIVE) {
   Point expected_center_a = {.x_ = -2, .y_ = -3};
   Point expected_center_b = {.x_ = 8, .y_ = 6};
 
-  EXPECT_EQ(expected_center_a.x_, centers[0].x_);
-  EXPECT_EQ(expected_center_a.y_, centers[0].y_);
-  EXPECT_EQ(expected_center_b.x_, centers[1].x_);
-  EXPECT_EQ(expected_center_b.y_, centers[1].y_);
+  bool equality_1 = expected_center_a.x_ == centers[0].x_ &&
+                    expected_center_a.y_ == centers[0].y_ &&
+                    expected_center_b.x_ == centers[1].x_ &&
+                    expected_center_b.y_ == centers[1].y_;
+
+  bool equality_2 = expected_center_a.x_ == centers[1].x_ &&
+                    expected_center_a.y_ == centers[1].y_ &&
+                    expected_center_b.x_ == centers[0].x_ &&
+                    expected_center_b.y_ == centers[0].y_;
+
+  ASSERT_TRUE(equality_1 || equality_2);
 }

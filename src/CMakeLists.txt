@@ -1,7 +1,7 @@
-find_package (Threads)
+find_package(Threads)
 
-if (NOT DEFINED NTHREADS)
-  if (WIN32)
+if(NOT DEFINED NTHREADS)
+  if(WIN32)
     set(NTHREADS 8)
   endif()
   if(UNIX)
@@ -9,11 +9,11 @@ if (NOT DEFINED NTHREADS)
   endif()
 endif(NOT DEFINED NTHREADS)
 
-configure_file (
+configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/parallel_distance.h.in"
   "${CMAKE_CURRENT_SOURCE_DIR}/parallel_distance.h"
   )
 
-add_library (${PROJECT_NAME} point.c parallel_distance.c kmeans.c)
+add_library(${PROJECT_NAME} point.c parallel_distance.c kmeans.c)
 
 target_link_libraries(${PROJECT_NAME} m ${CMAKE_THREAD_LIBS_INIT})

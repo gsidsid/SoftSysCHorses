@@ -59,7 +59,7 @@ Point *kmeans(Point *points, int num_pts, int num_centers) {
       center_change += distanceSquared(centers[i], centers_prev[i]);
 
     memcpy(centers_prev, centers, sizeof(Point) * num_centers);
-  } while (center_change > 1e-20);
+  } while (center_change > 1e-8);
 
   return centers;
 }

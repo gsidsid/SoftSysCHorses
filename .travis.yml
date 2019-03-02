@@ -6,12 +6,11 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - gc-7
+      - gcc-7
       - g++-7
 
 env:
-  - "CXX=g++-7"
-  - "CXX=gcc-7"
+  - "CC=gcc-7 && CXX=g++-7"
 
 before_script:
   - mkdir build

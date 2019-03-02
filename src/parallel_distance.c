@@ -27,7 +27,7 @@ void *calc_distances_thread(void *arg) {
           distanceSquared(thread_args->origin_, thread_args->points_[idx]);
     }
 
-  pthread_exit(NULL);
+  pthread_exit((void *)arg);
 }
 
 void distanceSquareds(const Point origin, const Point *points,
@@ -46,15 +46,18 @@ void distanceSquareds(const Point origin, const Point *points,
 
   sem_init(thread_args.mutex, 0, 1);
 
+  int rc;
+
   for (int i = 0; i < NTHREADS; ++i) {
     sem_wait(thread_args.mutex);
     thread_args.part_ = i;
-    pthread_create(&threads[thread_args.part_], NULL, calc_distances_thread,
-                   &thread_args);
+    rc = pthread_create(threads + thread_args.part_, NULL,
+                            calc_distances_thread, &thread_args);
   }
 
-  for (int i = 0; i < NTHREADS; ++i)
-    pthread_join(threads[i], NULL);
+  for (int i = 0; i < NTHREADS; ++i) {
+    rc = pthread_join(threads[i], NULL);
+  }
 
   sem_destroy(thread_args.mutex);
 }

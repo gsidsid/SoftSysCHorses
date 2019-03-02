@@ -23,7 +23,7 @@ void kmeans_iteration(Point *points, Point *centers, int num_pts,
   }
 
   int cluster_size[num_centers];
-  Point *cluster_total = malloc(num_centers * sizeof(Point));
+  Point cluster_total[num_centers];
 
   for (int i = 0; i < num_pts; ++i) {
     cluster_size[i] = 0;
@@ -38,7 +38,8 @@ void kmeans_iteration(Point *points, Point *centers, int num_pts,
   }
 
   for (int i = 0; i < num_centers; ++i)
-    centers[i] = divide_point_int(cluster_total[i], cluster_size[i]);
+    if (cluster_size[i] != 0)
+      centers[i] = divide_point_int(cluster_total[i], cluster_size[i]);
 }
 
 Point *kmeans(Point *points, int num_pts, int num_centers) {
@@ -46,7 +47,7 @@ Point *kmeans(Point *points, int num_pts, int num_centers) {
   memcpy(centers_a, points, sizeof(Point) * num_centers);
 
   Point centers_b[num_centers];
-  kmeans_iteration(points, centers_b, num_pts, num_centers);
+  memcpy(centers_b, points, sizeof(Point) * num_centers);
 
   int current_center = 0;
   int center_change;
@@ -64,7 +65,7 @@ Point *kmeans(Point *points, int num_pts, int num_centers) {
     for (int i = 0; i < num_centers; ++i)
       center_change += distanceSquared(centers_a[i], centers_b[i]);
 
-  } while (center_change < 0.1);
+  } while (center_change > 0.001);
 
   return centers_a;
 }

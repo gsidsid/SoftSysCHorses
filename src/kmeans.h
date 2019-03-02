@@ -12,3 +12,5 @@
  */
 void kmeans_iteration(Point *points, Point *centers, int num_pts,
                       int num_centers);
+
+Point *kmeans(Point *points, int num_pts, int num_centers);

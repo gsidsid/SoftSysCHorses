@@ -5,12 +5,12 @@
 
 int main() {
   Point a = {.x_ = 0, .y_ = 0};
-  Point b = {.x_ = 0, .y_ = 1};
-  Point c = {.x_ = 0, .y_ = 2};
+  Point b = {.x_ = 0, .y_ = 34};
+  Point c = {.x_ = 0, .y_ = 20};
   Point d = {.x_ = 0, .y_ = 3};
   Point e = {.x_ = 0, .y_ = 4};
-  Point f = {.x_ = 0, .y_ = 5};
-  Point g = {.x_ = 0, .y_ = 6};
+  Point f = {.x_ = 0, .y_ = 19};
+  Point g = {.x_ = 0, .y_ = 18};
   Point h = {.x_ = 0, .y_ = 7};
   Point i = {.x_ = 0, .y_ = 8};
 
@@ -27,8 +27,8 @@ int main() {
 
   Point centers[] = {o, m};
 
-  kmeans_iteration(z, centers, 9, 2);
+  Point *centers2 = kmeans(z, 9, 2);
 
   for (int i = 0; i < 2; ++i)
-    printf("%f, %f\n", centers[i].x_, centers[i].y_);
+    printf("Final center %d: %f, %f\n", i, centers2[i].x_, centers2[i].y_);
 }

@@ -15,17 +15,20 @@ int main() {
   Point i = {.x_ = 0, .y_ = 8};
 
   Point o = {.x_ = 0, .y_ = 0};
+  Point m = {.x_ = 0, .y_ = 4};
 
   Point z[] = {a, b, c, d, e, f, g, h, i};
   double w[9];
+  printf("Distance: %f\n", distanceSquared(a, b));
   distanceSquareds(o, z, 9, w);
   for (int i = 0; i < 9; ++i)
     printf("%d: %f\n", i, w[i]);
   printf("nthreads: %d\n", NTHREADS);
 
-  Point centers[] = {o};
+  Point centers[] = {o, m};
 
-  kmeans_iteration(z, centers, 9, 1);
+  kmeans_iteration(z, centers, 9, 2);
 
-  printf("%f, %f\n", centers[0].x_, centers[0].y_);
+  for (int i = 0; i < 2; ++i)
+    printf("%f, %f\n", centers[i].x_, centers[i].y_);
 }

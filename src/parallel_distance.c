@@ -39,6 +39,7 @@ void distanceSquareds(const Point origin, const Point *points,
                             .rem_ = num_pts % NTHREADS,
                             .points_ = points,
                             .distances_ = distances,
+                            .origin_ = origin,
                             .mutex = &mutex};
 
   pthread_t threads[NTHREADS];

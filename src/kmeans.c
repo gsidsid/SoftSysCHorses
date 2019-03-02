@@ -23,7 +23,7 @@ void kmeans_iteration(Point *points, Point *centers, int num_pts,
   }
 
   int cluster_size[num_centers];
-  Point cluster_total[num_centers];
+  Point *cluster_total = malloc(num_centers * sizeof(Point));
 
   for (int i = 0; i < num_pts; ++i) {
     cluster_size[i] = 0;

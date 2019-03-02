@@ -4,7 +4,7 @@ extern "C" {
 }
 
 TEST(DistanceTest, POSITIVE) {
-  struct Point a = {.x_ = 0, .y_ = 1};
-  struct Point b = {.x_ = 0, .y_ = 2};
+  Point a = {.x_ = 0, .y_ = 1};
+  Point b = {.x_ = 0, .y_ = 2};
   EXPECT_EQ(1, distanceSquared(a, b));
 }

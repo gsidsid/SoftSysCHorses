@@ -2,19 +2,19 @@
 
 #include <parallel_distance.h>
 
-struct KMeansArgs {
-  struct Point *points_;
-  struct Point *centers_;
+typedef struct {
+  Point *points_;
+  Point *centers_;
   int num_pts_;
   int num_centers_;
-};
+} KMeansArgs ;
 
-struct Point add_point(const struct Point a, const struct Point b) {
-  struct Point c = {.x_ = a.x_ + b.x_, .y_ = a.y_ + b.y_};
+Point add_point(const Point a, const Point b) {
+  Point c = {.x_ = a.x_ + b.x_, .y_ = a.y_ + b.y_};
   return c;
 }
 
-void kmeans_iteration(struct KMeansArgs kmeans_args) {
+void kmeans_iteration(KMeansArgs kmeans_args) {
   double distances[kmeans_args.num_centers_][kmeans_args.num_pts_];
 
   for (int i = 0; i < kmeans_args.num_centers_; ++i)

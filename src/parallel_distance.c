@@ -5,12 +5,12 @@
 
 #include "parallel_distance.h"
 
-double distanceSquared(const struct Point a, const struct Point b) {
+double distanceSquared(const Point a, const Point b) {
   return pow(a.x_ - b.x_, 2) + pow(a.y_ - b.y_, 2);
 }
 
 void *calc_distances_thread(void *arg) {
-  const struct ThreadArgs *thread_args = (struct ThreadArgs *)arg;
+  const ThreadArgs *thread_args = (ThreadArgs *)arg;
   const int part = thread_args->part_;
   sem_post(thread_args->mutex);
 
@@ -31,11 +31,11 @@ void *calc_distances_thread(void *arg) {
   pthread_exit(NULL);
 }
 
-void distanceSquareds(const struct Point origin, const struct Point *points,
+void distanceSquareds(const Point origin, const Point *points,
                       const int num_pts, double *distances) {
   sem_t mutex;
 
-  struct ThreadArgs thread_args = {.num_pts_ = num_pts,
+  ThreadArgs thread_args = {.num_pts_ = num_pts,
                                    .base_sz_ = num_pts / NTHREADS,
                                    .rem_ = num_pts % NTHREADS,
                                    .points_ = points,

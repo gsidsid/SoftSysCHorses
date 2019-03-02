@@ -1,32 +1,70 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include <parallel_distance.h>
+#include <point.h>
 
-typedef struct {
-  Point *points_;
-  Point *centers_;
-  int num_pts_;
-  int num_centers_;
-} KMeansArgs ;
+#include "kmeans.h"
 
-Point add_point(const Point a, const Point b) {
-  Point c = {.x_ = a.x_ + b.x_, .y_ = a.y_ + b.y_};
-  return c;
-}
+void kmeans_iteration(Point *points, Point *centers, int num_pts,
+                      int num_centers) {
+  double distances[num_centers][num_pts];
 
-void kmeans_iteration(KMeansArgs kmeans_args) {
-  double distances[kmeans_args.num_centers_][kmeans_args.num_pts_];
+  for (int i = 0; i < num_centers; ++i)
+    distanceSquareds(centers[i], points, num_pts, distances[i]);
 
-  for (int i = 0; i < kmeans_args.num_centers_; ++i)
-    distanceSquareds(kmeans_args.centers_[i], kmeans_args.points_,
-                     kmeans_args.num_pts_, distances[i]);
+  int min_idxs[num_pts];
 
-  int min_idxs[kmeans_args.num_pts_];
-
-  for (int i = 0; i < kmeans_args.num_pts_; ++i) {
+  for (int i = 0; i < num_pts; ++i) {
     min_idxs[i] = 0;
-    for (int j = 1; j < kmeans_args.num_centers_; ++j)
+    for (int j = 1; j < num_centers; ++j)
       if (distances[min_idxs[i]][i] > distances[j][i])
         min_idxs[i] = j;
   }
+
+  int cluster_size[num_centers];
+  Point cluster_total[num_centers];
+
+  for (int i = 0; i < num_pts; ++i) {
+    cluster_size[i] = 0;
+    Point tmp = {0};
+    cluster_total[i] = tmp;
+  }
+
+  for (int i = 0; i < num_pts; ++i) {
+    cluster_size[min_idxs[i]]++;
+    cluster_total[min_idxs[i]] =
+        add_point_point(cluster_total[min_idxs[i]], points[i]);
+  }
+
+  for (int i = 0; i < num_centers; ++i)
+    centers[i] = divide_point_int(cluster_total[i], cluster_size[i]);
+}
+
+Point *kmeans(Point *points, int num_pts, int num_centers) {
+  Point *centers_a = malloc(sizeof(Point) * num_centers);
+  memcpy(centers_a, points, sizeof(Point) * num_centers);
+
+  Point centers_b[num_centers];
+  kmeans_iteration(points, centers_b, num_pts, num_centers);
+
+  int current_center = 0;
+  int center_change;
+
+  do {
+    if (current_center)
+      kmeans_iteration(points, centers_b, num_pts, num_centers);
+    else
+      kmeans_iteration(points, centers_a, num_pts, num_centers);
+
+    current_center = current_center ? 0 : 1;
+
+    center_change = 0;
+
+    for (int i = 0; i < num_centers; ++i)
+      center_change += distanceSquared(centers_a[i], centers_b[i]);
+
+  } while (center_change < 0.1);
+
+  return centers_a;
 }

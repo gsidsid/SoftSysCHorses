@@ -1,11 +1,12 @@
-dist: bionic
-sudo: require
+dist: xenial
 language: cpp
 
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
-      - libgtest-dev
+      - g++
 
 before_script:
   - mkdir build

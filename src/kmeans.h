@@ -1,3 +1,5 @@
+#pragma once
+
 #include <parallel_distance.h>
 #include <point.h>
 

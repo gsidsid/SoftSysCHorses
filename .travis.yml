@@ -20,6 +20,10 @@ before_script:
   - cd build
   - cmake ..
 
+stages:
+  - build
+  - test
+
 jobs:
   include:
     - stage: build

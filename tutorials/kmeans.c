@@ -19,4 +19,16 @@ def ReadData(fileName):
 
     shuffle(items);
 
-    return items; 
+    return items;
+
+
+edit
+play_arrow
+
+brightness_4
+def EuclideanDistance(x, y):
+    S = 0; #  The sum of the squared differences of the elements
+    for i in range(len(x)):
+        S += math.pow(x[i]-y[i], 2);
+
+    return math.sqrt(S); #The square root of the sum 

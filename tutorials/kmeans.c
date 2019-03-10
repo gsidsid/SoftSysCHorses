@@ -1,34 +1,44 @@
-def ReadData(fileName):
+#include <stdio.h>
+#include <malloc.h>
+#include <math.h>
 
-    # Read the file, splitting by lines
-    f = open(fileName, 'r');
-    lines = f.read().splitlines();
-    f.close();
+typedef struct point {
 
-    items = [];
+        int abs,
+            ord;
+} Point;
 
-    for i in range(1, len(lines)):
-        line = lines[i].split(',');
-        itemFeatures = [];
+float euclidean_distance(Point *p1, Point *p2) {
 
-        for j in range(len(line)-1):
-            v = float(line[j]); # Convert feature value to float
-            itemFeatures.append(v); # Add feature value to dict
+      return sqrt((p2->abs - p1->abs)*(p2->abs - p1->abs) + (p2->ord - p1->ord)*(p2->ord - p1->ord));
+}
 
-        items.append(itemFeatures);
+int main() {
 
-    shuffle(items);
+    Point *p1,
+          *p2;
 
-    return items;
+    p1 = (Point*)malloc(sizeof(Point));
+    p2 = (Point*)malloc(sizeof(Point));
 
+    float res;
 
-edit
-play_arrow
+    printf("First point\n");
+    printf("Abs: ");
+    scanf("%d", &p1->abs);
+    printf("Ord: ");
+    scanf("%d", &p1->ord);
 
-brightness_4
-def EuclideanDistance(x, y):
-    S = 0; #  The sum of the squared differences of the elements
-    for i in range(len(x)):
-        S += math.pow(x[i]-y[i], 2);
+    printf("Second point\n");
+    printf("Abs: ");
+    scanf("%d", &p2->abs);
+    printf("Ord: ");
+    scanf("%d", &p2->ord);
 
-    return math.sqrt(S); #The square root of the sum 
+    res = euclidean_distance(p1,p2);
+    printf("Distance = %f", res);
+
+    free(p1);
+    free(p2);
+ return(0);
+};

@@ -5,7 +5,7 @@
 #include <pthread.h>
 
 // Let us create a global variable to change it in threads
-int g = 0;
+int g = 1;
 
 // The function to be executed by all threads
 void *myThreadFun(void *vargp)
@@ -20,7 +20,7 @@ void *myThreadFun(void *vargp)
     ++s; ++g;
 
     // Print the argument, static and global variables
-    printf("Thread ID: %d, Static: %d, Global: %d\n", *myid, ++s, ++g); 
+    printf("Thread ID: %d, Static: %d, Global: %d\n", *myid, ++s, ++g);
 }
 
 int main()

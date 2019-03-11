@@ -1,0 +1,39 @@
+#pragma once
+
+#include <semaphore.h>
+
+#include <point.h>
+
+#define NTHREADS @NTHREADS@
+
+typedef struct {
+  int num_pts_;
+  int base_sz_;
+  int rem_;
+  Point origin_;
+  Point *points_;
+  double *distances_;
+  int part_;
+  sem_t *mutex;
+} ThreadArgs;
+
+/**
+   Function that gets passed to pthread_create.
+
+   @param args a pointer to the internal function arguments.
+   @return pointer to exit status
+ */
+void *calc_distances_thread(void *arg);
+
+/**
+   Calculate the distance between a group of points and an origin.
+
+   @param origin the origin used to calculate vector length.
+   @param points the points with which to compute norms.
+   @param num_pts the amount of points to calculate the distance to.
+   @param distances the buffer to put the acquired distances into.
+   The order of distances which populate the buffer will be respective
+   to the order of the order of the input points.
+ */
+void distanceSquareds(const Point origin, const Point *points,
+                      const int num_pts, double *distances);

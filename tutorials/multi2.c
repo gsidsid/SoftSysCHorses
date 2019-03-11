@@ -14,7 +14,7 @@ void *myThreadFun(void *vargp)
     int *myid = (int *)vargp;
 
     // Let us create a static variable to observe its changes
-    static int s = 0;
+    static int s = 1;
 
     // Change static and global variables
     ++s; ++g;

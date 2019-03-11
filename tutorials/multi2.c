@@ -29,7 +29,7 @@ int main()
     pthread_t tid;
 
     // Let us create three threads
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < 6; i++)
         pthread_create(&tid, NULL, myThreadFun, (void *)&tid);
 
     pthread_exit(NULL);

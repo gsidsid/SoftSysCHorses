@@ -10,9 +10,11 @@ void kmeans_iteration(Point *points, Point *centers, int num_pts,
                       int num_centers) {
   double distances[num_centers][num_pts];
 
+  // Compute distances of all points from all centers
   for (int i = 0; i < num_centers; ++i)
     distanceSquareds(centers[i], points, num_pts, distances[i]);
 
+  // Store the index of the closest center to all points
   int min_idxs[num_pts];
 
   for (int i = 0; i < num_pts; ++i) {
@@ -25,18 +27,21 @@ void kmeans_iteration(Point *points, Point *centers, int num_pts,
   int cluster_size[num_centers];
   Point cluster_total[num_centers];
 
+  // Initialize arrays as 0;
   for (int i = 0; i < num_centers; ++i) {
     cluster_size[i] = 0;
     Point tmp = {0};
     cluster_total[i] = tmp;
   }
 
+  // Add up the points in each cluster
   for (int i = 0; i < num_pts; ++i) {
     cluster_size[min_idxs[i]]++;
     cluster_total[min_idxs[i]] =
         add_point_point(cluster_total[min_idxs[i]], points[i]);
   }
 
+  // Average the points in each cluster
   for (int i = 0; i < num_centers; ++i)
     if (cluster_size[i] != 0)
       centers[i] = divide_point_int(cluster_total[i], cluster_size[i]);
@@ -49,7 +54,7 @@ Point *kmeans(Point *points, int num_pts, int num_centers) {
   Point centers_prev[num_centers];
   memcpy(centers_prev, points, sizeof(Point) * num_centers);
 
-  int center_change;
+  double center_change;
 
   do {
     kmeans_iteration(points, centers, num_pts, num_centers);

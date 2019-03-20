@@ -7,8 +7,8 @@
 // A small data structure to do RAII for a dataset of 2-dimensional points.
 struct Data {
   explicit Data(int size) : size(size), bytes(size * sizeof(float)) {
-    cudaMalloc(&y, bytes);
     cudaMalloc(&x, bytes);
+    cudaMalloc(&y, bytes);
   }
 
   Data(int size, std::vector<float>& h_x, std::vector<float>& h_y)

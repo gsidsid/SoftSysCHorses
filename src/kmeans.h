@@ -1,7 +1,7 @@
 #pragma once
 
 #include <parallel_distance.h>
-#include <point.h>
+//#include <point.h>
 
 /**
    Updates the location of the centers of clusters.

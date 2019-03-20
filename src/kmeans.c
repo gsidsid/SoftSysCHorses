@@ -4,7 +4,7 @@
 #include <parallel_distance.h>
 #include <point.h>
 
-//#include "kmeans.h"
+#include "kmeans.h"
 
 void kmeans_iteration(Point *points, Point *centers, int num_pts,
                       int num_centers) {

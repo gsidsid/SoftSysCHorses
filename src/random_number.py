@@ -1,5 +1,7 @@
 import random
 import csv
+from numpy import vstack,array
+from numpy.random import rand
 radius = 200
 rangeX = (0, 2500)
 rangeY = (0, 2500)
@@ -22,6 +24,7 @@ while i<qty:
     i += 1
 
     #excluded.update((x+dx, y+dy) for (dx,dy) in deltas)
+randPoints = vstack((rand(150,2) + array([.5,.5]),rand(150,2)))
 
 print (randPoints)
 

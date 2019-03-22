@@ -2,6 +2,7 @@ import random
 import csv
 from numpy import vstack,array
 from numpy.random import rand
+import numpy
 # radius = 200
 # rangeX = (0, 2500)
 # rangeY = (0, 2500)
@@ -27,12 +28,13 @@ from numpy.random import rand
 randPoints = vstack((rand(150,2) *2500 ,rand(150,2)*2500))
 
 print (randPoints)
+numpy.savetxt("random.csv", randPoints, delimiter=",")
 
-import csv
-
-item_length = len(randPoints[0])
-
-with open('test.csv', 'wb') as test_file:
-  file_writer = csv.writer(test_file)
-  for i in range(item_length):
-    file_writer.writerow([x[i] for x in randPoints])
+# import csv
+#
+# item_length = len(randPoints[0])
+#
+# with open('test.csv', 'wb') as test_file:
+#   file_writer = csv.writer(test_file)
+#   for i in range(item_length):
+#     file_writer.writerow([x[i] for x in randPoints])

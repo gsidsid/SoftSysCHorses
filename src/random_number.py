@@ -14,28 +14,17 @@ for x in range(-radius, radius+1):
             deltas.add((x,y))
 
 randPoints = []
-#excluded = set()# excludes all points within radius of previous points
-#to increase randomness
+
 i = 0
 while i<qty:
     x = random.randrange(*rangeX)
     y = random.randrange(*rangeY)
-    #if (x,y) in excluded: continue
     randPoints.append((x,y))
     i += 1
 
-    #excluded.update((x+dx, y+dy) for (dx,dy) in deltas)
 randPoints_float = vstack((rand(150,2) *2500 ,rand(150,2)*2500))
 
 print (randPoints)
 numpy.savetxt("random_float.csv", randPoints_float, delimiter=",")
 
 numpy.savetxt("random_int.csv", randPoints, delimiter=",")
-# import csv
-#
-# item_length = len(randPoints[0])
-#
-# with open('test.csv', 'wb') as test_file:
-#   file_writer = csv.writer(test_file)
-#   for i in range(item_length):
-#     file_writer.writerow([x[i] for x in randPoints])

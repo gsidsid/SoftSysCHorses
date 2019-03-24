@@ -31,13 +31,13 @@ NVCC_FLAGS := $(CXX_FLAGS) $(DEBUG_FLAGS_NVCC) --expt-extended-lambda
 
 all: kmeans_device kmeans_host kmeans_host_nvcc
 
-kmeans_device: main.c kmeans.c point.c single_threaded_distance.cpp
+kmeans_device: time_kmeans.c kmeans.c point.c single_threaded_distance.cpp
 	$(NVCC) $? $(NVCC_FLAGS) -x cu -o $@
 
-kmeans_host_nvcc: main.c kmeans.c point.c single_threaded_distance.cpp
+kmeans_host_nvcc: time_kmeans.c kmeans.c point.c single_threaded_distance.cpp
 	$(NVCC) $? $(CXX_FLAGS) -x c++ -o $@
 
-kmeans_host: main.c kmeans.c point.c single_threaded_distance.cpp
+kmeans_host: time_kmeans.c kmeans.c point.c single_threaded_distance.cpp
 	$(CXX) $? $(CXX_FLAGS) $(HOST_ONLY_FLAGS) -o $@
 
 clean:

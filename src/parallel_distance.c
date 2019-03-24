@@ -9,6 +9,7 @@
 void *calc_distances_thread(void *arg) {
   const ThreadArgs *thread_args = (ThreadArgs *)arg;
   const int part = thread_args->part_;
+  // Unlock the thread
   sem_post(thread_args->mutex);
 
   int idx;

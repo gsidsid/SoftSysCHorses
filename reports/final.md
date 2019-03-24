@@ -2,7 +2,202 @@
 Kawin Nikomborirak, Siddarth Garimella, Sreekanth Sajjala
 
 ## Project Goals
-Our goal for the project was to understand low-level optimization in C by exploring kmeans.
-To do this, our tool of emphasis was parallelism via the POSIX threading library pthread and the semaphore library semaphore.
-Since this would be a collaborative project, we also set out to explore various tools for project management, such as build systems (CMake), CI (travis), and unit testing (Google Tests).
+Our goal for the project was to understand low-level optimization in C
+by exploring kmeans.  To do this, our tool of emphasis was parallelism
+via the POSIX threading library pthread and the semaphore library
+semaphore.  Since this would be a collaborative project, we also set
+out to explore various tools for project management, such as build
+systems (CMake), CI (travis), and unit testing (Google Tests).  The
+deliverable includes a graph showing a successful clustering exercise
+as well as tabulated runtimes between four implementations: SciPy’s,
+our single threaded one, our multi-threaded one, and our CUDA
+implementation. Another deliverable is a successful Travis build
+check.
 
+## Learning Goals
+Our goal for this project was originally to make something fast,
+namely K-means via parallelization. While creating the project,
+though, many welcome distractions arose, such as wanting to assure
+that everyone’s code worked when committed and needing to develop for
+a GPU platform on a machine without a GPU. With one of us working on a
+windows machine and the rest of us working from Linux machines, CMake
+became a natural option to keep track of build options. The learning
+goals became being able to make performant code with C while also
+learning how to deal with cross-platform and cross-developer code.
+
+## Deliverables
+By the end of the project we were able to get all 3 versions of the
+function up and running. We clocked the single threaded K-Means at
+10ms, the multithreaded one at 4ms and the CUDA implementation at
+xms. We compared the runtimes to the scipy implementation of K means
+on python. Here is the runtime table.
+
+| Method                     | Time (ms) | Correct |
+|----------------------------|-----------|---------|
+| `scipy.cluster.vq.kmeans`  | 7         | ✓       |
+| single thread              | 10        | ✓       |
+| multi threaded (8 threads) | 4         | ✓       |
+| GPU (NVidia 930 MX)        |           |         |
+
+The data was generated using [a python script](../src/random_clusters.py).
+All of the implementations clustered the points correctly as shown below:
+
+![](../res/result.png)
+
+The punchline parts of all four implementations are discussed below:
+
+### Python
+Since we did not have to write it, testing the python implementation was easy:
+
+``` python
+POINTS = whiten(np.genfromtxt("random_clusters.csv", delimiter=","))
+WHITENED = whiten(POINTS)
+time = timeit.timeit(lambda: kmeans(WHITENED, 3), number=1)
+print(time)
+```
+
+### Single Threaded and Multi Threaded
+The multi-threaded implementation was parallelized over the distance calculation for all points to a single cluster center so the bulk of the code is the same.
+The only difference is how `distanceSquareds`, the function which returns the distances of every point from a cluster center, is defined.
+
+The algorithm for a single iteration breaks down as:
+
+1. Create a 2D array of distances from all points to all centers
+2. Create a 1D array containing the index of the closest center to each point.
+3. Use the above array to average the points within the proximity of each cluster.
+
+``` c
+void kmeans_iteration(Point *points, Point *centers, int num_pts,
+                      int num_centers) {
+  double distances[num_centers][num_pts];
+
+  // Compute distances of all points from all centers
+  for (int i = 0; i < num_centers; ++i)
+    distanceSquareds(centers[i], points, num_pts, distances[i]);
+
+  // Store the index of the closest center to all points
+  int min_idxs[num_pts];
+
+  for (int i = 0; i < num_pts; ++i) {
+    min_idxs[i] = 0;
+    for (int j = 1; j < num_centers; ++j)
+      if (distances[min_idxs[i]][i] > distances[j][i])
+        min_idxs[i] = j;
+  }
+
+  int cluster_size[num_centers];
+  Point cluster_total[num_centers];
+
+  // Initialize arrays as 0;
+  for (int i = 0; i < num_centers; ++i) {
+    cluster_size[i] = 0;
+    Point tmp = {0};
+    cluster_total[i] = tmp;
+  }
+
+  // Add up the points in each cluster
+  for (int i = 0; i < num_pts; ++i) {
+    cluster_size[min_idxs[i]]++;
+    cluster_total[min_idxs[i]] =
+        add_point_point(cluster_total[min_idxs[i]], points[i]);
+  }
+
+  // Average the points in each cluster
+  for (int i = 0; i < num_centers; ++i)
+    if (cluster_size[i] != 0)
+      centers[i] = divide_point_int(cluster_total[i], cluster_size[i]);
+}
+```
+
+The function which repetitively calls the iterations is:
+
+``` c
+Point *kmeans(Point *points, int num_pts, int num_centers) {
+  ...
+  do {
+    kmeans_iteration(points, centers, num_pts, num_centers);
+    center_change = 0;
+
+    for (int i = 0; i < num_centers; ++i)
+      center_change += distanceSquared(centers[i], centers_prev[i]);
+
+    memcpy(centers_prev, centers, sizeof(Point) * num_centers);
+  } while (center_change > 1e-8);
+
+  return centers;
+}
+```
+
+The implementation of the single threaded `distanceSquareds` function was trivial, as it is a for loop which adds up the squares of the coordinate differences.
+However, the implementation of the multithreaded function was more involved.
+The first order of business is to create a thread that carries out the required task.
+The tricky part is that each thread must lock until the appropriate portion of the points to handle is assigned.
+Otherwise, the first two calls of a function may end up handling the same portion of the points leaving the last portion untaken.
+Therefore, we had to use a semaphore which is locked before calling the thread and unlocked while the thread is running:
+
+``` c
+void *calc_distances_thread(void *arg) {
+  const ThreadArgs *thread_args = (ThreadArgs *)arg;
+  const int part = thread_args->part_;
+  // Unlock the thread
+  sem_post(thread_args->mutex);
+
+  int idx;
+
+  // This part simply schedules the amount of points, handled by each thread,
+  // such that all threads handle either n or n+1 points and the threads that
+  // start first take n+1 points.
+  if (part < thread_args->rem_)
+    for (int i = 0; i <= thread_args->base_sz_; ++i) {
+      idx = i + part * (thread_args->base_sz_ + 1);
+      thread_args->distances_[idx] =
+          distanceSquared(thread_args->origin_, thread_args->points_[idx]);
+    }
+  else
+    for (int i = 0; i < thread_args->base_sz_; ++i) {
+      idx = thread_args->rem_ * (thread_args->base_sz_ + 1) +
+            (part - thread_args->rem_) * thread_args->base_sz_ + i;
+      thread_args->distances_[idx] =
+          distanceSquared(thread_args->origin_, thread_args->points_[idx]);
+    }
+
+  pthread_exit((void *)arg);
+}
+```
+
+Calling the thread function looked like this:
+
+``` c
+void distanceSquareds(const Point origin, const Point *points,
+                      const int num_pts, double *distances) {
+  sem_t mutex;
+  ...
+  for (int i = 0; i < NTHREADS; ++i) {
+    sem_wait(thread_args.mutex);
+    thread_args.part_ = i;
+    rc = pthread_create(threads + thread_args.part_, NULL,
+                            calc_distances_thread, &thread_args);
+  }
+
+  // wait for all threads to terminate
+  for (int i = 0; i < NTHREADS; ++i) {
+    rc = pthread_join(threads[i], NULL);
+  }
+
+  // Free the semaphore
+  sem_destroy(thread_args.mutex);
+}
+```
+
+## Reflection
+As mentioned in the deliverables we were able to get all 3 variations
+of the K means function implemented on a single thread, multiple
+threads and on GPU respectively. The learning goals of implementing
+functions in C, using C to parallelize a function like K means and the
+stretch goal of learning and using CUDA were all achieved. The other
+stretch learning goal of using GTK was not achieved as it turned out
+not be an area of interest as we went through with the project. On the
+other hand we explored techniques such as setting up docker
+environments to devlop for a GPU platform on a non-GPU machine, using
+cmake and unit testing with google test which were not part of the
+original learning goals.

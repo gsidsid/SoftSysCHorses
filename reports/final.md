@@ -189,6 +189,30 @@ void distanceSquareds(const Point origin, const Point *points,
 }
 ```
 
+Both single and multi threaded implementations are built depending on the `SINGLE_THREADED` flag at the top of [kmeans.c](../src/kmeans.c):
+
+
+``` c
+#ifdef SINGLE_THREADED
+#include <single_threaded_distance.h>
+#else
+#include <parallel_distance.h>
+#endif
+```
+
+So that the amount of threads is 'correct' for as many linux machines as we can manage, we pass the amount of threads from a CMake call to nproc in [src/CMakeLists.txt](../src/CMakeLists.txt):
+
+``` CMake
+if(NOT DEFINED NTHREADS)
+  if(WIN32)
+    set(NTHREADS 8)
+  endif()
+  if(UNIX)
+    execute_process(COMMAND nproc OUTPUT_VARIABLE NTHREADS)
+  endif()
+endif(NOT DEFINED NTHREADS)
+```
+
 ## Reflection
 As mentioned in the deliverables we were able to get all 3 variations
 of the K means function implemented on a single thread, multiple

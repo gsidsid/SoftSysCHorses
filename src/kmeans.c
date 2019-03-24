@@ -1,11 +1,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* #ifdef SINGLE_THREADED */
-/* #include <single_threaded_distance.h> */
-/* #else */
+#ifdef SINGLE_THREADED
+#include <single_threaded_distance.h>
+#else
 #include <parallel_distance.h>
-/* #endif */
+#endif
 #include <point.h>
 
 #include "kmeans.h"

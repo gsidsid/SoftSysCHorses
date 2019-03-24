@@ -52,7 +52,7 @@ void kmeans_iteration(Point *points, Point *centers, int num_pts,
 }
 
 Point *kmeans(Point *points, int num_pts, int num_centers) {
-  Point *centers = malloc(sizeof(Point) * num_centers);
+  Point *centers = (Point *)malloc(sizeof(Point) * num_centers);
   memcpy(centers, points, sizeof(Point) * num_centers);
 
   Point centers_prev[num_centers];

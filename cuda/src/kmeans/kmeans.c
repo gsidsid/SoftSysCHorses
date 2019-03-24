@@ -1,18 +1,14 @@
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
-#include <point.h>
+#include "single_threaded_distance.h"
+#include "point.h"
 
-#include "hemi.h"
 #include "kmeans.h"
 
-void distanceSquareds(const Point origin, const Point *points,
-		      const int num_pts, double *distances) 
-{
-    for (int i = 0; i < num_pts; ++i) 
-    {
-        distances[i] = distanceSquared(origin, points[i]);
-    }
+double distanceSquared(const Point a, const Point b) {
+    return pow(a.x_ - b.x_, 2) + pow(a.y_ - b.y_, 2);
 }
 
 void kmeans_iteration(Point *points, Point *centers, int num_pts,
@@ -57,7 +53,7 @@ void kmeans_iteration(Point *points, Point *centers, int num_pts,
 }
 
 Point *kmeans(Point *points, int num_pts, int num_centers) {
-  Point *centers = malloc(sizeof(Point) * num_centers);
+  Point *centers = (Point*) malloc(sizeof(Point) * num_centers);
   memcpy(centers, points, sizeof(Point) * num_centers);
 
   Point centers_prev[num_centers];

@@ -26,7 +26,7 @@ int main() {
     ++i;
   }
 
-  Point *centers = malloc(sizeof(Point) * NUM_CENTERS);
+  Point *centers = (Point*) malloc(sizeof(Point) * NUM_CENTERS);
   clock_t start = clock();
   centers = kmeans(points, NUM_PTS, 3);
   clock_t end = clock();

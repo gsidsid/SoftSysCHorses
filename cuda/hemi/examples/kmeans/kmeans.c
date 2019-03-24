@@ -1,10 +1,15 @@
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "single_threaded_distance.h"
 #include "point.h"
 
 #include "kmeans.h"
+
+double distanceSquared(const Point a, const Point b) {
+    return pow(a.x_ - b.x_, 2) + pow(a.y_ - b.y_, 2);
+}
 
 void kmeans_iteration(Point *points, Point *centers, int num_pts,
                       int num_centers) {

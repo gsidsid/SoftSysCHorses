@@ -6,15 +6,6 @@ typedef struct {
 } Point;
 
 /**
-  Calculate the squared distance between two points.
-
-  @param a the first point.
-  @param b the second point.
-  @return the squared distance between the two points.
- */
-double distanceSquared(const Point a, const Point b);
-
-/**
    Vector sum of two points.
 
    @param a the first point

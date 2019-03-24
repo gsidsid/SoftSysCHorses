@@ -2,7 +2,7 @@
 
 #include "point.h"
 
-double distanceSquared(const Point a, const Point b) {
+__host__ __device__ double distanceSquared(const Point a, const Point b) {
   return pow(a.x_ - b.x_, 2) + pow(a.y_ - b.y_, 2);
 }
 

@@ -21,12 +21,11 @@ def rand_clusters(within_cluster_stddev, between_cluster_variance, num_clusters,
 
 
 # Test the function
-RAND_POINTS = rand_clusters(1, 100, 3, 200)
+RAND_POINTS = rand_clusters(0.0001, 100, 3, 256)
 
 F, AX = plt.subplots()
 AX.plot(RAND_POINTS[:, 0], RAND_POINTS[:, 1], '.')
 
 np.savetxt("random_clusters.csv", RAND_POINTS, delimiter=",")
 
-F.show()
-F.show()
+plt.show()

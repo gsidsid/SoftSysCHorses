@@ -35,5 +35,5 @@ void *calc_distances_thread(void *arg);
    The order of distances which populate the buffer will be respective
    to the order of the order of the input points.
  */
-void distanceSquareds(const Point origin, const Point *points,
+void distanceSquareds(const Point origin, Point *points,
                       const int num_pts, double *distances);

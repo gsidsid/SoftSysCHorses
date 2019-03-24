@@ -173,6 +173,8 @@ void distanceSquareds(const Point origin, const Point *points,
   sem_t mutex;
   ...
   for (int i = 0; i < NTHREADS; ++i) {
+    // Lock the semaphore until the the threade knows which portion
+    // of the points it is working with
     sem_wait(thread_args.mutex);
     thread_args.part_ = i;
     rc = pthread_create(threads + thread_args.part_, NULL,

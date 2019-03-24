@@ -200,7 +200,8 @@ Both single and multi threaded implementations are built depending on the `SINGL
 #endif
 ```
 
-So that the amount of threads is 'correct' for as many linux machines as we can manage, we pass the amount of threads from a CMake call to nproc in [src/CMakeLists.txt](../src/CMakeLists.txt):
+So that the amount of threads is 'correct' for as many linux machines as we can manage, we pass the amount of threads from a CMake call to nproc in [src/CMakeLists.txt](../src/CMakeLists.txt).
+In the case of a windows machine, we set the amount of threads to 8 as we could not find reasonable windows command for this purpose:
 
 ``` CMake
 if(NOT DEFINED NTHREADS)
@@ -212,6 +213,80 @@ if(NOT DEFINED NTHREADS)
   endif()
 endif(NOT DEFINED NTHREADS)
 ```
+
+### Testing
+In order to assure Sid, our code hygienist, that our code works at all times, another explored skill was unit testing.
+The tool used was [Googletest](https://github.com/google/googletest).
+The executable used was [test/parallel_distance_test.cpp](../test/parallel_distance_test.cpp), which tests the singular distance squared function, the parallelized distance function, and the final kmeans function:
+
+``` c++
+#include <gtest/gtest.h>
+extern "C" {
+#include <kmeans.h>
+#include <parallel_distance.h>
+}
+
+TEST(DistanceTest, POSITIVE) {
+  Point a = {.x_ = 0, .y_ = 1};
+  Point b = {.x_ = 0, .y_ = 2};
+  EXPECT_EQ(1, distanceSquared(a, b));
+}
+
+TEST(ParallelDistanceTest, POSITIVE) {
+  ...
+  distanceSquareds(a, pts, 6, distances);
+
+  for (int i = 0; i < 6; ++i)
+    EXPECT_EQ(distances[i], expected[i]);
+}
+
+TEST(KMeansTest, POSITIVE) {
+  ...
+  // Check if either of the possible orders for returning the
+  // two centers match the desired output.
+  ool equality_1 = expected_center_a.x_ == centers[0].x_ &&
+                    expected_center_a.y_ == centers[0].y_ &&
+                    expected_center_b.x_ == centers[1].x_ &&
+                    expected_center_b.y_ == centers[1].y_;
+
+  bool equality_2 = expected_center_a.x_ == centers[1].x_ &&
+                    expected_center_a.y_ == centers[1].y_ &&
+                    expected_center_b.x_ == centers[0].x_ &&
+                    expected_center_b.y_ == centers[0].y_;
+
+  ASSERT_TRUE(equality_1 || equality_2);
+}
+```
+
+Notably, we used c++ to test.
+After some searching, we found that testing c code with c++ is not a crutch, rather it is a practical and effective choice.
+After all, c++ is faster to write and easier to read, and test cases usually do not need the fine-grained control of c.
+It is also easy to call c from c++.
+
+Running `ctest` in the build directory (after going through the
+required build steps discussed in the [README](../README.md)), the
+following summary appears:
+
+```
+Test project /home/concaveusr/project/SoftSysCHorses/build
+    Start 1: DistanceTest.POSITIVE
+1/3 Test #1: DistanceTest.POSITIVE ............   Passed    0.00 sec
+    Start 2: ParallelDistanceTest.POSITIVE
+2/3 Test #2: ParallelDistanceTest.POSITIVE ....   Passed    0.00 sec
+    Start 3: KMeansTest.POSITIVE
+3/3 Test #3: KMeansTest.POSITIVE ..............   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 3
+
+Total Test time (real) =   0.01 sec
+```
+
+which shows that the tests pass.
+
+### Continuous Integration
+In order to see a log of builds while having the option of backtracking to a known working commit, we used [Travis CI](https://travis-ci.org/).
+Because our build system was robust, the script was the usual `cmake`, `make`, and `ctest` workflow.
+The only hitch was the need to use a more recent version of gcc due to the requirements of google test.
 
 ## Reflection
 As mentioned in the deliverables we were able to get all 3 variations

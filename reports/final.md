@@ -63,14 +63,18 @@ on python. Here is the runtime table.
 
 | Method                     | Time (ms) | Correct |
 |----------------------------|-----------|---------|
-| `scipy.cluster.vq.kmeans`  | 6         | ✓       |
-| single thread              | XX        | ✓       |
-| multi threaded (8 threads) | XX        | ✓       |
-| GPU (NVidia 930 MX)        | 2.2       |         |
+| `scipy.cluster.vq.kmeans`  | 50        | ✓       |
+| single thread              | 8         | ✓       |
+| multi threaded (8 threads) | 3         | ✓       |
+| GPU (NVidia 930 MX)        | 2.2       | ✓       |
+
+Again, all scripts reached the same clusters here:
+![](../res/res10k.png)
 
 The data was generated using [this python script](../src/random_clusters_10000.py).
 
 The punchline parts of all four implementations are discussed below:
+
 
 ### Python
 Since we did not have to write it, testing the python implementation was easy:

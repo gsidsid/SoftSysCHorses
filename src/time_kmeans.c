@@ -4,14 +4,14 @@
 #include <string.h>
 #include <time.h>
 
-#define NUM_PTS 3*256
 #define NUM_CENTERS 3
+#define NUM_PTS NUM_CENTERS*10000
 
 Point readPoint(char *str) {}
 
 int main() {
   Point points[NUM_PTS];
-  FILE *stream = fopen("random_clusters.csv", "r");
+  FILE *stream = fopen("random_clusters_10000.csv", "r");
   FILE *ostream = fopen("cluster_centers.csv", "w");
   char line[1024];
   double x, y;

@@ -31,7 +31,7 @@ void *calc_distances_thread(void *arg) {
   pthread_exit((void *)arg);
 }
 
-void distanceSquareds(const Point origin, const Point *points,
+void distanceSquareds(const Point origin, Point *points,
                       const int num_pts, double *distances) {
   sem_t mutex;
 

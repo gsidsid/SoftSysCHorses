@@ -7,8 +7,6 @@
 #define NUM_CENTERS 3
 #define NUM_PTS NUM_CENTERS*10000
 
-Point readPoint(char *str) {}
-
 int main() {
   Point points[NUM_PTS];
   FILE *stream = fopen("random_clusters_10000.csv", "r");

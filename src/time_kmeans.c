@@ -5,7 +5,7 @@
 #include <time.h>
 
 #define NUM_CENTERS 3
-#define NUM_PTS NUM_CENTERS*10000
+#define NUM_PTS NUM_CENTERS*5000
 
 int main() {
   Point points[NUM_PTS];
@@ -15,7 +15,7 @@ int main() {
   double x, y;
   int i = 0;
 
-  while (fgets(line, 1024, stream)) {
+  while (fgets(line, 1024, stream) && i < NUM_PTS) {
     char *tmp = strdup(line);
     sscanf(tmp, "%lf,%lf\n", &x, &y);
 
@@ -28,7 +28,7 @@ int main() {
 
   Point *centers = malloc(sizeof(Point) * NUM_CENTERS);
   clock_t start = clock();
-  centers = kmeans(points, NUM_PTS, 3);
+  centers = kmeans(points, NUM_PTS, NUM_CENTERS);
   clock_t end = clock();
   double time_spent = (double) (end - start) / CLOCKS_PER_SEC;
   printf("Run time: %lf seconds\n", time_spent);
@@ -37,4 +37,6 @@ int main() {
     printf("Center %d: %lf, %lf\n", i, centers[i].x_, centers[i].y_);
     fprintf(ostream, "%lf,%lf\n", centers[i].x_, centers[i].y_);
     }
+
+  free(centers);
 }

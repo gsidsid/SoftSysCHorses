@@ -5,7 +5,7 @@
 #include <time.h>
 
 #define NUM_CENTERS 3
-#define NUM_PTS NUM_CENTERS*5000
+#define NUM_PTS NUM_CENTERS*10000
 
 int main() {
   Point points[NUM_PTS];

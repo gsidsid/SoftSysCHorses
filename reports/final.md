@@ -1,5 +1,5 @@
 # Learning about Parallelism, Testing, and Build Systems
-Kawin Nikomborirak, Siddarth Garimella, Sreekanth Sajjala
+Kawin Nikomborirak, Siddharth Garimella, Sreekanth Sajjala
 
 ## Project Goals
 Our goal for the project was to understand low-level optimization in C
@@ -32,7 +32,7 @@ function up and running. As we expected our characterization of the
 algorithm's performance among single threaded, multi threaded, and 
 GPU implementations to change with the number of points used,
 we tried timing the executions once with 768 points, and again with
-30,000 points. This could provide us with some basic insight as to
+30,000 points. This provides us with some basic insight as to
 how our different implementations scale.
 
 
@@ -58,7 +58,7 @@ All of the implementations clustered the points correctly as shown below:
 
 We clocked the single threaded K-Means at
 XXms, the multithreaded one at XXms and the CUDA implementation at
-2.25ms. We compared the runtimes to the scipy implementation of K means
+2.2ms. We compared the runtimes to the scipy implementation of K means
 on python. Here is the runtime table.
 
 | Method                     | Time (ms) | Correct |
@@ -241,6 +241,8 @@ if(NOT DEFINED NTHREADS)
   endif()
 endif(NOT DEFINED NTHREADS)
 ```
+### GPU Implementation
+
 
 ### Testing
 In order to assure Sid, our code hygienist, that our code works at all times, another explored skill was unit testing.

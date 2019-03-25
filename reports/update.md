@@ -1,4 +1,5 @@
 # On Parallel K-Means
+Kawin Nikomborirak, Sid Garimella, Sreekanth Sajjala
 We aim to explore the potential of efficiency of using C through multithreading a program.
 We have chosen K means as an appropriate algorithm for this.
 The MVP we plan to achieve is a working multithreaded function which successfully clusters points.

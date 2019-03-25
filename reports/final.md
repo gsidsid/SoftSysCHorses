@@ -26,8 +26,19 @@ goals became being able to make performant code with C while also
 learning how to deal with cross-platform and cross-developer code.
 
 ## Deliverables
+
 By the end of the project we were able to get all 3 versions of the
-function up and running. We clocked the single threaded K-Means at
+function up and running. As we expected our characterization of the
+algorithm's performance among single threaded, multi threaded, and 
+GPU implementations to change with the number of points used,
+we tried timing the executions once with 786 points, and again with
+30,000 points. This could provide us with some basic insight as to
+how our different implementations scale.
+
+
+### 768 points
+
+We clocked the single threaded K-Means at
 10ms, the multithreaded one at 4ms and the CUDA implementation at
 xms. We compared the runtimes to the scipy implementation of K means
 on python. Here is the runtime table.
@@ -37,12 +48,28 @@ on python. Here is the runtime table.
 | `scipy.cluster.vq.kmeans`  | 7         | ✓       |
 | single thread              | 10        | ✓       |
 | multi threaded (8 threads) | 4         | ✓       |
-| GPU (NVidia 930 MX)        |           |         |
+| GPU (NVidia 930 MX)        | 0.3       | ✓       |
 
-The data was generated using [a python script](../src/random_clusters.py).
+The data was generated using [this python script](../src/random_clusters.py).
 All of the implementations clustered the points correctly as shown below:
 
 ![](../res/result.png)
+
+### 30,000 points
+
+We clocked the single threaded K-Means at
+XXms, the multithreaded one at XXms and the CUDA implementation at
+2.25ms. We compared the runtimes to the scipy implementation of K means
+on python. Here is the runtime table.
+
+| Method                     | Time (ms) | Correct |
+|----------------------------|-----------|---------|
+| `scipy.cluster.vq.kmeans`  | 6         | ✓       |
+| single thread              | XX        | ✓       |
+| multi threaded (8 threads) | XX        | ✓       |
+| GPU (NVidia 930 MX)        | 2.2       |         |
+
+The data was generated using [this python script](../src/random_clusters_10000.py).
 
 The punchline parts of all four implementations are discussed below:
 

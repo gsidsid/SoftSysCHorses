@@ -2,7 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-POINTS = np.genfromtxt("random_clusters.csv", delimiter=",")
+POINTS = np.genfromtxt("other_points.csv", delimiter=",")
 CENTERS = np.genfromtxt("cluster_centers.csv", delimiter=",")
 CLUSTERS = []
 for _ in range(len(CENTERS)):
@@ -15,6 +15,8 @@ for point in POINTS:
 
 for i, _ in enumerate(CLUSTERS):
     CLUSTERS[i] = np.array(CLUSTERS[i])
+    if (not CLUSTERS[i].size):
+        CLUSTERS[i] = CLUSTERS[i].reshape(0, 2)
 
 F, AX = plt.subplots()
 for cluster in CLUSTERS:

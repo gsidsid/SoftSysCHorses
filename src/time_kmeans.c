@@ -11,6 +11,7 @@ int main() {
   Point points[NUM_PTS];
   FILE *stream = fopen("random_clusters_10000.csv", "r");
   FILE *ostream = fopen("cluster_centers.csv", "w");
+  FILE *oostream = fopen("other_points.csv", "w");
   char line[1024];
   double x, y;
   int i = 0;
@@ -18,6 +19,7 @@ int main() {
   while (fgets(line, 1024, stream) && i < NUM_PTS) {
     char *tmp = strdup(line);
     sscanf(tmp, "%lf,%lf\n", &x, &y);
+    fprintf(oostream, "%lf,%lf\n", x, y);
 
     points[i].x_ = x;
     points[i].y_ = y;

@@ -31,7 +31,7 @@ By the end of the project we were able to get all 3 versions of the
 function up and running. As we expected our characterization of the
 algorithm's performance among single threaded, multi threaded, and 
 GPU implementations to change with the number of points used,
-we tried timing the executions once with 786 points, and again with
+we tried timing the executions once with 768 points, and again with
 30,000 points. This could provide us with some basic insight as to
 how our different implementations scale.
 
@@ -52,7 +52,6 @@ on python. Here is the runtime table.
 
 The data was generated using [this python script](../src/random_clusters.py).
 All of the implementations clustered the points correctly as shown below:
-
 ![](../res/result.png)
 
 ### 30,000 points

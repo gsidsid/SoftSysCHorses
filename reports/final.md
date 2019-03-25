@@ -45,9 +45,9 @@ on python. Here is the runtime table.
 
 | Method                     | Time (ms) | Correct |
 |----------------------------|-----------|---------|
-| `scipy.cluster.vq.kmeans`  | 7         | ✓       |
-| single thread              | 10        | ✓       |
-| multi threaded (8 threads) | 4         | ✓       |
+| `scipy.cluster.vq.kmeans`  | 6         | ✓       |
+| single thread              | 4         | ✓       |
+| multi threaded (8 threads) | 3         | ✓       |
 | GPU (NVidia 930 MX)        | 0.3       | ✓       |
 
 The data was generated using [this python script](../src/random_clusters.py).

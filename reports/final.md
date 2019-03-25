@@ -25,6 +25,13 @@ became a natural option to keep track of build options. The learning
 goals became being able to make performant code with C while also
 learning how to deal with cross-platform and cross-developer code.
 
+## Useful Resources
+- https://computing.llnl.gov/tutorials/pthreads/: pthread tutorial with examples.
+- https://docs.oracle.com/cd/E19683-01/806-6867/sync-27385/index.html: Semaphore tutorial.
+- https://cmake.org/cmake-tutorial/ served as a CMake tutorial.
+- https://github.com/google/googletest/blob/master/googletest/docs/samples.md Examples for google test unit testing.
+- https://github.com/google/googletest/blob/master/googletest/README.md: google test build instructions.
+
 ## Deliverables
 
 By the end of the project we were able to get all 3 versions of the

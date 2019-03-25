@@ -71,8 +71,6 @@ on python. Here is the runtime table.
 Again, all scripts reached the same clusters here:
 ![](../res/res10k.png)
 
-The data was generated using [this python script](../src/random_clusters_10000.py).
-
 The punchline parts of all four implementations are discussed below:
 
 

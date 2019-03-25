@@ -1,5 +1,5 @@
 # Learning about Parallelism, Testing, and Build Systems
-Kawin Nikomborirak, Siddarth Garimella, Sreekanth Sajjala
+Kawin Nikomborirak, Siddharth Garimella, Sreekanth Sajjala
 
 ## Project Goals
 Our goal for the project was to understand low-level optimization in C

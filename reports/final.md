@@ -25,13 +25,6 @@ became a natural option to keep track of build options. The learning
 goals became being able to make performant code with C while also
 learning how to deal with cross-platform and cross-developer code.
 
-## Useful Resources
-- https://computing.llnl.gov/tutorials/pthreads/: pthread tutorial with examples.
-- https://docs.oracle.com/cd/E19683-01/806-6867/sync-27385/index.html: Semaphore tutorial.
-- https://cmake.org/cmake-tutorial/ served as a CMake tutorial.
-- https://github.com/google/googletest/blob/master/googletest/docs/samples.md Examples for google test unit testing.
-- https://github.com/google/googletest/blob/master/googletest/README.md: google test build instructions.
-
 ## Deliverables
 
 By the end of the project we were able to get all 3 versions of the
@@ -251,7 +244,9 @@ if(NOT DEFINED NTHREADS)
 endif(NOT DEFINED NTHREADS)
 ```
 ### GPU Implementation
+The base code for the GPU implementation (cuda/src/kmeans) remains largely the same as the single threaded implementation described above. The distance algorithm which finds the distances from all the points to an origin point, however, has been modified to run in parallel and on the GPU. 
 
+To manage the cuda development toolchain, a docker image was used, which builds off of the nvidia/cuda base image, and adds the code from this repo along with some appropriate text editing tools for testing within the container. To efficiently take the CPU implementation and make it runnable on GPU devices, the hemi framework was used. You can read more about it here: https://github.com/harrism/hemi. To make the device executing the algorithm use the NVIDIA 930MX GPU, some drivers were installed and configured, and the docker container was linked to the nvidia runtime. Furthermore, to ensure only the NVIDIA GPU was handling the code, the GPU was isolated using a build argument.
 
 ### Testing
 In order to assure Sid, our code hygienist, that our code works at all times, another explored skill was unit testing.

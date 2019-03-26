@@ -48,7 +48,7 @@ on python. Here is the runtime table.
 | `scipy.cluster.vq.kmeans`  | 6         | ✓       |
 | single thread              | 4         | ✓       |
 | multi threaded (8 threads) | 3         | ✓       |
-| GPU (NVidia 930 MX)        | 0.3       | ✓       |
+| GPU (NVidia 930 MX)        | 0.03      | ✓       |
 
 The data was generated using [this python script](../src/random_clusters.py).
 All of the implementations clustered the points correctly as shown below:
@@ -66,7 +66,7 @@ on python. Here is the runtime table.
 | `scipy.cluster.vq.kmeans`  | 50        | ✓       |
 | single thread              | 8         | ✓       |
 | multi threaded (8 threads) | 3         | ✓       |
-| GPU (NVidia 930 MX)        | 2.2       | ✓       |
+| GPU (NVidia 930 MX)        | 1.4       | ✓       |
 
 Again, all scripts reached the same clusters here:
 ![](../res/res10k.png)
@@ -247,6 +247,22 @@ endif(NOT DEFINED NTHREADS)
 The base code for the GPU implementation (cuda/src/kmeans) remains largely the same as the single threaded implementation described above. The distance algorithm which finds the distances from all the points to an origin point, however, has been modified to run in parallel and on the GPU. 
 
 To manage the cuda development toolchain, a docker image was used, which builds off of the nvidia/cuda base image, and adds the code from this repo along with some appropriate text editing tools for testing within the container. To efficiently take the CPU implementation and make it runnable on GPU devices, the hemi framework was used. You can read more about it here: https://github.com/harrism/hemi. To make the device executing the algorithm use the NVIDIA 930MX GPU, some drivers were installed and configured, and the docker container was linked to the nvidia runtime. Furthermore, to ensure only the NVIDIA GPU was handling the code, the GPU was isolated using a build argument.
+
+The main area of inefficiency in the former two implementations is found in the distance algorithm, or the way K-means calculates the distances from each point to a center. In the single threaded implementation, this process is done sequentially. As the output distances' order do not matter, this is inefficient, an an Embarrassingly parallel problem. The parallelized CPU version does well at solving for all the distances faster by using multiple threads, coming in at about 5 ms faster than the single threaded version for K-means with 10,000 points.
+
+Running this code on the GPU which has a much higher core count and is less limited by busy threads, however, shows that the algorithm's run time can be reduced further still, by about two times for K-means with 100,000 points. This optimization is largely due to the following code:
+
+```c
+void distanceSquareds(const Point origin, const Point *points,
+                      const int num_pts, double *distances) {
+    parallel_for(0, num_pts, [distances,origin,points] HEMI_LAMBDA (int i) {
+        distances[i] = pow(origin.x_ - points[i].x_, 2) + pow(origin.y_ - points[i].y_, 2);
+    });
+    deviceSynchronize();
+}
+```
+
+The parallel_for method is defined in hemi and is described by their documentation to "launch a parallel kernel which executes the provided GPU lambda function as the body of a parallel loop." In other words, hemi taks the distance formula provided in the lambda function defined in parallel_for and runs it in parallel on the GPU. The GPU, having a higher capacity for parallelization, thus performs the task faster on average (across all n points) than possible on the CPU.
 
 ### Testing
 In order to assure Sid, our code hygienist, that our code works at all times, another explored skill was unit testing.

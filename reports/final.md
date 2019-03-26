@@ -57,7 +57,7 @@ All of the implementations clustered the points correctly as shown below:
 ### 30,000 points
 
 We clocked the single threaded K-Means at
-XXms, the multithreaded one at XXms and the CUDA implementation at
+8 ms, the multithreaded one at 3 ms and the CUDA implementation at
 2.2ms. We compared the runtimes to the scipy implementation of K means
 on python. Here is the runtime table.
 

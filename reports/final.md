@@ -50,6 +50,14 @@ on python. Here is the runtime table.
 | multi threaded (8 threads) | 3         | ✓       |
 | GPU (NVidia 930 MX)        | 0.03      | ✓       |
 
+It is interesting exactly how much faster the code runs on the GPU as 
+opposed to on the CPU. After doing some research here, we believe this
+degree of optimization is possible because with only 768 points, all 
+the distance calculations can be conducted in parallel on the GPU without 
+having to wait on any busy threads. There are probably other factors at
+play here as well, but more research will have to be done regarding the
+high degree of optimization.
+
 The data was generated using [this python script](../src/random_clusters.py).
 All of the implementations clustered the points correctly as shown below:
 ![](../res/result.png)

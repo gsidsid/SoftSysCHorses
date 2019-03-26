@@ -16,8 +16,6 @@ STD := --std=c++11
 
 CXX_FLAGS  := $(STD) -I../ -I../../
 
-HOST_ONLY_FLAGS := -DHEMI_CUDA_DISABLE
-
 # uncomment for debug
 #DEBUG_FLAGS := -g -DDEBUG
 #DEBUG_FLAGS_NVCC := -G
@@ -29,16 +27,13 @@ CXX_FLAGS += $(DEBUG_FLAGS)
 
 NVCC_FLAGS := $(CXX_FLAGS) $(DEBUG_FLAGS_NVCC) --expt-extended-lambda
 
-all: kmeans_device kmeans_host kmeans_host_nvcc
+all: kmeans_device kmeans_host_nvcc
 
-kmeans_device: time_kmeans.c kmeans.c point.c single_threaded_distance.cpp
+kmeans_device: time_kmeans.c kmeans.c point.c gpu_distance.cpp
 	$(NVCC) $? $(NVCC_FLAGS) -x cu -o $@
 
-kmeans_host_nvcc: time_kmeans.c kmeans.c point.c single_threaded_distance.cpp
+kmeans_host_nvcc: time_kmeans.c kmeans.c point.c gpu_distance.cpp
 	$(NVCC) $? $(CXX_FLAGS) -x c++ -o $@
-
-kmeans_host: time_kmeans.c kmeans.c point.c single_threaded_distance.cpp
-	$(CXX) $? $(CXX_FLAGS) $(HOST_ONLY_FLAGS) -o $@
 
 clean:
 	rm -rf kmeans_device kmeans_host_nvcc kmeans_host

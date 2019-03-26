@@ -1,7 +1,7 @@
 #include "point.h"
 #include <math.h>
 
-#include "single_threaded_distance.h"
+#include "gpu_distance.h"
 #include "hemi/parallel_for.h"
 
 using namespace hemi;

@@ -262,7 +262,7 @@ void distanceSquareds(const Point origin, const Point *points,
 }
 ```
 
-The parallel_for method is defined in hemi and is described by their documentation to "launch a parallel kernel which executes the provided GPU lambda function as the body of a parallel loop." In other words, hemi taks the distance formula provided in the lambda function defined in parallel_for and runs it in parallel on the GPU. The GPU, having a higher capacity for parallelization, thus performs the task faster on average than possible on the CPU.
+The parallel_for method is defined in hemi and is described by their documentation to "launch a parallel kernel which executes the provided GPU lambda function as the body of a parallel loop." In other words, hemi taks the distance formula provided in the lambda function defined in parallel_for and runs it in parallel on the GPU. The GPU, having a higher capacity for parallelization, thus performs the task faster on average (across all n points) than possible on the CPU.
 
 ### Testing
 In order to assure Sid, our code hygienist, that our code works at all times, another explored skill was unit testing.

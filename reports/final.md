@@ -40,7 +40,7 @@ how our different implementations scale.
 
 We clocked the single threaded K-Means at
 10ms, the multithreaded one at 4ms and the CUDA implementation at
-xms. We compared the runtimes to the scipy implementation of K means
+0.03ms. We compared the runtimes to the scipy implementation of K means
 on python. Here is the runtime table.
 
 | Method                     | Time (ms) | Correct |
@@ -58,7 +58,7 @@ All of the implementations clustered the points correctly as shown below:
 
 We clocked the single threaded K-Means at
 8 ms, the multithreaded one at 3 ms and the CUDA implementation at
-2.2ms. We compared the runtimes to the scipy implementation of K means
+1.4ms. We compared the runtimes to the scipy implementation of K means
 on python. Here is the runtime table.
 
 | Method                     | Time (ms) | Correct |
@@ -248,7 +248,7 @@ The base code for the GPU implementation (cuda/src/kmeans) remains largely the s
 
 To manage the cuda development toolchain, a docker image was used, which builds off of the nvidia/cuda base image, and adds the code from this repo along with some appropriate text editing tools for testing within the container. To efficiently take the CPU implementation and make it runnable on GPU devices, the hemi framework was used. You can read more about it here: https://github.com/harrism/hemi. To make the device executing the algorithm use the NVIDIA 930MX GPU, some drivers were installed and configured, and the docker container was linked to the nvidia runtime. Furthermore, to ensure only the NVIDIA GPU was handling the code, the GPU was isolated using a build argument.
 
-The main area of inefficiency in the former two implementations is found in the distance algorithm, or the way K-means calculates the distances from each point to a center. In the single threaded implementation, this process is done sequentially. As the output distances' order do not matter, this is inefficient, an an Embarrassingly parallel problem. The parallelized CPU version does well at solving for all the distances faster by using multiple threads, coming in at about 5 ms faster than the single threaded version for K-means with 10,000 points.
+The main area of inefficiency in the former two implementations is found in the distance algorithm, or the way K-means calculates the distances from each point to a center. In the single threaded implementation, this process is done sequentially. As the output distances' order do not matter, this is inefficient, and an Embarrassingly parallel problem. The parallelized CPU version does well at solving for all the distances faster by using multiple threads, coming in at about 5 ms faster than the single threaded version for K-means with 10,000 points.
 
 Running this code on the GPU which has a much higher core count and is less limited by busy threads, however, shows that the algorithm's run time can be reduced further still, by about two times for K-means with 100,000 points. This optimization is largely due to the following code:
 

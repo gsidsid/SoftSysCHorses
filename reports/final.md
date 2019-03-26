@@ -252,7 +252,7 @@ The main area of inefficiency in the former two implementations is found in the 
 
 Running this code on the GPU which has a much higher core count and is less limited by busy threads, however, shows that the algorithm's run time can be reduced further still, by about two times for K-means with 100,000 points. This optimization is largely due to the following code:
 
-```
+```c
 void distanceSquareds(const Point origin, const Point *points,
                       const int num_pts, double *distances) {
     parallel_for(0, num_pts, [distances,origin,points] HEMI_LAMBDA (int i) {
